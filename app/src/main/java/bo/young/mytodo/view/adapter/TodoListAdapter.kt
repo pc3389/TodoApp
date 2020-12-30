@@ -11,8 +11,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TodoListAdapter(val todoItems: ArrayList<Todo>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TodoListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var todoItems: List<Todo> = listOf()
 
     class TodoViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val title = view.tv_todo_title
@@ -24,20 +25,22 @@ class TodoListAdapter(val todoItems: ArrayList<Todo>) :
             createdDate.text = convertLongToTime(todoModel.createdDate)
         }
 
-        fun convertLongToTime(time: Long): String {
+        private fun convertLongToTime(time: Long): String {
             val date = Date(time)
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.CANADA)
             return format.format(date)
         }
     }
 
+    fun setTodoItems(todoItems: List<Todo>) {
+        this.todoItems = todoItems
+        notifyDataSetChanged()
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_todo, parent, false)
         return TodoViewHolder(view)
-    }
-
-    fun addItem(todoModel: Todo) {
-        todoItems.add(todoModel)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
